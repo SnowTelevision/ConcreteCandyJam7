@@ -60,5 +60,12 @@ public class Player : MonoBehaviour {
         //{
         //    velocity.y = jumpVelocity;
         //}
-	}
+
+        if (Input.GetButtonDown("Action"))
+        {
+            if (transform.parent)
+                transform.parent.gameObject.GetComponent<Lift>().ToggleMovement();
+        }
+    }
+
 }
