@@ -2,30 +2,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CandyGenerator : MonoBehaviour {
+public class CandyGenerator : MonoBehaviour
+{
 
-    // Use this for initialization
-    public GameObject Candy;
-    public int MaxCandy;
+    private GameObject[] locationsToSpawn;
+    private float counter = 0;
+    [SerializeField]
+    GameObject[] objectToSpawn;
+    [SerializeField]
+    float timeBetweenSpawns = 3.0f;
+
     void Start()
     {
-        Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
-        Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
+        locationsToSpawn = GameObject.FindGameObjectsWithTag("SpawnLocation");
+        
 
-        for (int i = 0; i < MaxCandy; ++i)
-        {
-            GameObject candy = (GameObject)Instantiate(Candy);
-           // candy.GetComponent<SpriteRenderer>().color = starColors[i % starColors.Length];
-            candy.transform.position = new Vector2(Random.Range(min.x, max.x), Random.Range(min.y, max.y));
-            candy.GetComponent<Candies>().speed = (1f * Random.value + 0.5f);
-            candy.transform.parent = transform;
-        }
 
     }
+    void Update()
+    {
+        counter += Time.deltaTime;
+        if (counter > timeBetweenSpawns)
+        {
+            GameObject spawnedObject;
+            spawnedObject = Instantiate(objectToSpawn[Random.Range(0, objectToSpawn.Length)], locationsToSpawn[Random.Range(0, locationsToSpawn.Length)].transform.position, Quaternion.identity) as GameObject;
 
-
-    // Update is called once per frame
-    void Update () {
-		
-	}
+            counter = 0;
+        }
+    }
 }

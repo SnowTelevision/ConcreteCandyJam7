@@ -5,27 +5,15 @@ using UnityEngine;
 public class Candies : MonoBehaviour
 {
 
- // Use this for initialization
-    public float speed;
-    void Start()
-    {
+    // Use this for initialization
+    public float fallSpeed = 8.0f;
+    public float spinSpeed = 250.0f;
 
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        Vector2 position = transform.position;
-        position = new Vector2(position.x, position.y - speed * Time.deltaTime);
-        transform.position = position;
 
-        Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
-        Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
-
-        if (transform.position.y < min.y)
-        {
-            transform.position = new Vector2(Random.Range(min.x, max.x), max.y);
-        }
+        transform.Translate(Vector3.down * fallSpeed * Time.deltaTime, Space.World);
+        transform.Rotate(Vector3.forward, spinSpeed * Time.deltaTime);
 
     }
 }
