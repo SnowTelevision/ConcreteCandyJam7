@@ -27,7 +27,7 @@ public class Lift : MonoBehaviour {
         {
             Vector3 pos = Camera.main.WorldToViewportPoint(transform.position);
 
-            transform.Translate(dir * speed);
+            transform.parent.transform.Translate(dir * speed);
 
             if(!moveSideways)
             {
@@ -61,9 +61,21 @@ public class Lift : MonoBehaviour {
         isMoving = !isMoving;
     }
 
-    void OnCollisionStay2D(Collision2D coll)
+    public void Shrink()
     {
-        coll.gameObject.transform.parent = transform;
+        if (transform.localScale.x != 1)
+        {
+            transform.localScale = new Vector3(transform.localScale.x - 1, transform.localScale.y, transform.localScale.z);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D coll)
+    {
+        coll.gameObject.transform.parent = transform.parent;
     }
 
     void OnCollisionExit2D(Collision2D coll)

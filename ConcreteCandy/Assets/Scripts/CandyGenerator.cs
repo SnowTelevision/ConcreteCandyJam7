@@ -21,6 +21,12 @@ public class CandyGenerator : MonoBehaviour
     }
     void Update()
     {
+        if(GameManager.Instance.gameOver)
+        {
+            timeBetweenSpawns = 0.0f;
+            Destroy(gameObject, 2.5f);
+        }
+
         counter += Time.deltaTime;
         if (counter > timeBetweenSpawns)
         {

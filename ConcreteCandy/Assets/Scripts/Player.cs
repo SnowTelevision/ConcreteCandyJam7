@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 [RequireComponent(typeof(Controller2D))]
 public class Player : MonoBehaviour {
 
+    public int score = 0;
     public float jumpHeight = 2.5f;
     public float timeToJumpApex = 0.25f;
 
@@ -21,11 +23,13 @@ public class Player : MonoBehaviour {
 
     Controller2D controller;
 
+    GameObject platform;
+
 	// Use this for initialization
 	void Start ()
     {
         controller = GetComponent<Controller2D>();
-
+        
         gravity = -(2 * jumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
         //print("Gravity: " + gravity + " Jump Velocity: " + jumpVelocity);
@@ -63,8 +67,57 @@ public class Player : MonoBehaviour {
 
         if (Input.GetButtonDown("Action"))
         {
-            if (transform.parent)
-                transform.parent.gameObject.GetComponent<Lift>().ToggleMovement();
+            if (platform)
+                platform.GetComponent<Lift>().ToggleMovement();
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D coll)
+    {
+        if (coll.gameObject.CompareTag("Candy"))
+        {
+            score++;
+        }
+
+        if (coll.gameObject.CompareTag("Platform"))
+        {
+            GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        }
+    }
+
+    void OnCollisionStay2D(Collision2D coll)
+    {
+        if (coll.gameObject.CompareTag("Platform"))
+        {
+            platform = coll.gameObject;
+        }
+    }
+
+    void OnCollisionExit2D(Collision2D coll)
+    {
+        if (coll.gameObject.CompareTag("Platform"))
+        {
+            platform = null;
+        }
+    }
+
+    void OnBecameInvisible()
+    {
+        if (!Camera.main)
+            return;
+        try
+        {
+            Vector3 pos = Camera.main.WorldToViewportPoint(transform.position);
+            pos = new Vector3(pos.x, 1.2f, pos.z);
+
+            GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            velocity = Vector3.zero;
+
+            transform.position = Camera.main.ViewportToWorldPoint(pos);
+        }
+        catch(Exception e)
+        {
+            Console.WriteLine(e.StackTrace);
         }
     }
 
