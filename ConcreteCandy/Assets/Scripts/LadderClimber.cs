@@ -44,6 +44,8 @@ public class LadderClimber : MonoBehaviour
                     climbing = true;
                     originalGravity = player.gravity;
                     player.gravity = 0;
+                    player.velocity.y = 0;
+                    player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
                 }
                 else
                 {
@@ -60,6 +62,8 @@ public class LadderClimber : MonoBehaviour
                     climbing = true;
                     originalGravity = player.gravity;
                     player.gravity = 0;
+                    player.velocity.y = 0;
+                    player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
                 }
                 else
                 {
@@ -71,6 +75,7 @@ public class LadderClimber : MonoBehaviour
         {
             climbing = false;
             player.gravity = originalGravity;
+            player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
         }
 
         //print("climbing: " + climbing + "  ladders: " + laddersInUse.Count);
