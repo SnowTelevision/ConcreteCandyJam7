@@ -6,6 +6,9 @@ public class Lift : MonoBehaviour {
 
     public bool moveSideways;
     public bool isMoving;
+    public float maxMove;
+    public float minMove;
+
     Vector2 dir;
     public float speed;
 
@@ -31,24 +34,24 @@ public class Lift : MonoBehaviour {
 
             if(!moveSideways)
             {
-                if (pos.y >= 0.9f && dir != Vector2.down)
+                if (pos.y >= maxMove && dir != Vector2.down)
                 {
                     dir = Vector2.down;
                 }
 
-                if (pos.y <= 0.1f && dir != Vector2.up)
+                if (pos.y <= minMove && dir != Vector2.up)
                 {
                     dir = Vector2.up;
                 }
             }
             else
             {
-                if (pos.x >= 0.7f && dir != Vector2.left)
+                if (pos.x >= maxMove && dir != Vector2.left)
                 {
                     dir = Vector2.left;
                 }
 
-                if (pos.x <= 0.3f && dir != Vector2.right)
+                if (pos.x <= minMove && dir != Vector2.right)
                 {
                     dir = Vector2.right;
                 }

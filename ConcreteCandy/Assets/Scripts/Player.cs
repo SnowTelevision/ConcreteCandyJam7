@@ -8,6 +8,7 @@ public class Player : MonoBehaviour {
     public int score = 0;
     public float jumpHeight = 2.5f;
     public float timeToJumpApex = 0.25f;
+    public int deathScoreDeductionFactor = 1;
 
     public float accelerationTimeAirorne = 0f;
     public float accelerationTimeGrounded = 0f;
@@ -76,7 +77,7 @@ public class Player : MonoBehaviour {
     {
         if (coll.gameObject.CompareTag("Candy"))
         {
-            score++;
+            AddScore(GameManager.Instance.platforms.Length);
         }
 
         if (coll.gameObject.CompareTag("Platform"))
@@ -101,12 +102,24 @@ public class Player : MonoBehaviour {
         }
     }
 
+    public void AddScore(int val)
+    {
+        score += val;
+
+        if (score < 0)
+        {
+            score = 0;
+        }
+    }
+
     void OnBecameInvisible()
     {
         if (!Camera.main)
             return;
         try
         {
+            AddScore(-GameManager.Instance.platforms.Length * deathScoreDeductionFactor);
+
             Vector3 pos = Camera.main.WorldToViewportPoint(transform.position);
             pos = new Vector3(pos.x, 1.2f, pos.z);
 

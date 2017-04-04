@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour {
     public GameObject endScreen;
     public Text scoreText;
     public Text endText;
+    public Text scoreMulText;
 
     public Player player;
     public GameObject[] platforms;
@@ -39,8 +40,10 @@ public class GameManager : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-        if(gameStarted && !gameOver)
+	void Update ()
+    {
+        scoreMulText.text = "x" + platforms.Length;
+        if (gameStarted && !gameOver)
         {
             scoreText.text = "Score: " + player.score;
             CheckEndGame();
@@ -76,14 +79,11 @@ public class GameManager : MonoBehaviour {
 
         if(platforms.Length == 1)
         {
-            if(platforms[0].transform.localScale.x == 1)
-            {
-                Destroy(platforms[0]);
-                Destroy(player, 2.5f);
-                gameOver = true;
-                endText.text = "Candies Eaten: " + player.score;
-                ActivateEndGameScreen();
-            }
+            Destroy(platforms[0]);
+            Destroy(player, 2.5f);
+            gameOver = true;
+            endText.text = "Candies Eaten: " + player.score;
+            ActivateEndGameScreen();
         }
     }
 }
