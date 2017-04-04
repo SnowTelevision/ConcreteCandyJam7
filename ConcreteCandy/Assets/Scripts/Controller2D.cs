@@ -71,6 +71,11 @@ public class Controller2D : MonoBehaviour {
         HorizontalCollisionsAfter(ref velocity);
         //VerticalCollisions(ref velocity);
 
+        if(player.GetComponent<LadderClimber>().IsClimbing)
+        {
+            velocity.y = 0;
+        }
+
         transform.Translate(velocity);
     }
 
