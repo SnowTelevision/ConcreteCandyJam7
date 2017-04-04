@@ -75,7 +75,7 @@ public class LadderClimber : MonoBehaviour
         {
             climbing = false;
             player.gravity = originalGravity;
-            player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+            player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
         }
 
         //print("climbing: " + climbing + "  ladders: " + laddersInUse.Count);
