@@ -16,6 +16,7 @@ public class LadderClimber : MonoBehaviour
 
     private HashSet<Ladder> laddersInUse = new HashSet<Ladder>();
     private HashSet<Ladder> ladderTopsInUse = new HashSet<Ladder>();
+    private HashSet<Ladder> ladderBottomsInUse = new HashSet<Ladder>();
     private bool climbing = false;
 
     // Use this for initialization
@@ -27,9 +28,16 @@ public class LadderClimber : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+
+        if (ladderBottomsInUse.Count > 0)
+        {
+            input.y = Mathf.Max(0.0f, input.y);
+        }
+
         if (laddersInUse.Count > 0)
         {
-            if (Input.GetKey(KeyCode.W))
+            if (Mathf.Abs(input.y) > 0.001f)
             {
                 if (!climbing)
                 {
@@ -39,7 +47,23 @@ public class LadderClimber : MonoBehaviour
                 }
                 else
                 {
-                    transform.Translate(0.0f, climbingSpeed * Time.deltaTime, 0.0f);
+                    transform.Translate(0.0f, input.y * climbingSpeed * Time.deltaTime, 0.0f);
+                }
+            }
+        }
+        else if (ladderTopsInUse.Count > 0)
+        {
+            if (input.y < 0.001f)
+            {
+                if (!climbing)
+                {
+                    climbing = true;
+                    originalGravity = player.gravity;
+                    player.gravity = 0;
+                }
+                else
+                {
+                    transform.Translate(0.0f, input.y * climbingSpeed * Time.deltaTime, 0.0f);
                 }
             }
         }
@@ -49,7 +73,7 @@ public class LadderClimber : MonoBehaviour
             player.gravity = originalGravity;
         }
 
-        print("climbing: " + climbing + "  ladders: " + laddersInUse.Count);
+        //print("climbing: " + climbing + "  ladders: " + laddersInUse.Count);
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -59,6 +83,8 @@ public class LadderClimber : MonoBehaviour
         {
             if (ladder.IsLadderTop)
                 ladderTopsInUse.Add(ladder);
+            else if (ladder.IsLadderBottom)
+                ladderBottomsInUse.Add(ladder);
             else
                 laddersInUse.Add(ladder);
         }
@@ -71,6 +97,8 @@ public class LadderClimber : MonoBehaviour
         {
             if (ladder.IsLadderTop)
                 ladderTopsInUse.Remove(ladder);
+            else if (ladder.IsLadderBottom)
+                ladderBottomsInUse.Remove(ladder);
             else
                 laddersInUse.Remove(ladder);
         }
